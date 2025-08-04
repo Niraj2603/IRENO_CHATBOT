@@ -423,48 +423,49 @@ class IrenoAdvisor {
     }
 
     initializeChatSection() {
+        console.log('Initializing chat section...');
         // Ensure chat messages are displayed
         const chatMessages = document.getElementById('chatMessages');
-        if (chatMessages && this.chatMessages.length === 0) {
+        if (!chatMessages) {
+            console.error('Chat messages container not found');
+            return;
+        }
+        
+        // Check if we need to sync the DOM with our message array
+        const currentDOMMessages = chatMessages.children.length;
+        const arrayMessages = this.chatMessages.length;
+        
+        console.log(`DOM messages: ${currentDOMMessages}, Array messages: ${arrayMessages}`);
+        
+        // If DOM has static content but our array is empty, clear DOM and initialize properly
+        if (currentDOMMessages > 0 && arrayMessages === 0) {
+            console.log('Clearing static content and initializing...');
+            chatMessages.innerHTML = '';
             this.initializeChat();
             const welcomeMessage = this.chatMessages[0];
-            this.addMessage(welcomeMessage.type, welcomeMessage.text, welcomeMessage.timestamp);
+            this.renderMessage(welcomeMessage.type, welcomeMessage.text, welcomeMessage.timestamp);
         }
-    }
-
-    initializeChat() {
-        if (this.chatMessages.length === 0) {
-            const welcomeMessage = {
-                type: 'bot',
-                text: "Hello! I'm IRENO AI Assistant. I can help you with grid operations, meter readings, alerts, and system monitoring. How can I assist you today?",
-                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            };
-            
-            this.chatMessages.push(welcomeMessage);
+        // If we have messages in memory but the DOM is empty, re-render them
+        else if (arrayMessages > 0 && currentDOMMessages === 0) {
+            console.log('Re-rendering messages from memory...');
+            this.chatMessages.forEach(message => {
+                this.renderMessage(message.type, message.text, message.timestamp);
+            });
         }
+        // If both are empty, initialize with welcome message
+        else if (arrayMessages === 0 && currentDOMMessages === 0) {
+            console.log('Initializing with welcome message...');
+            this.initializeChat();
+            const welcomeMessage = this.chatMessages[0];
+            this.renderMessage(welcomeMessage.type, welcomeMessage.text, welcomeMessage.timestamp);
+        }
+        
+        // Ensure the chat messages container is visible and scrolled to bottom
+        this.scrollChatToBottom(chatMessages);
+        console.log('Chat section initialized successfully');
     }
 
-    sendMessage() {
-        const chatInput = document.getElementById('chatInput');
-        if (!chatInput || !chatInput.value.trim()) return;
-
-        const message = chatInput.value.trim();
-        chatInput.value = '';
-
-        // Add user message
-        this.addMessage('user', message);
-
-        // Show typing indicator
-        this.showTypingIndicator();
-
-        // Simulate AI response
-        setTimeout(() => {
-            this.hideTypingIndicator();
-            this.handleAIResponse(message);
-        }, 1500 + Math.random() * 1000);
-    }
-
-    addMessage(type, text, timestamp = null) {
+    renderMessage(type, text, timestamp = null) {
         const chatMessages = document.getElementById('chatMessages');
         if (!chatMessages) return;
 
@@ -487,14 +488,96 @@ class IrenoAdvisor {
         `;
 
         chatMessages.appendChild(messageElement);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Ensure proper scrolling to bottom
+        this.scrollChatToBottom(chatMessages);
+        
+        console.log(`Message rendered (${type}):`, text.substring(0, 50) + '...');
+        
+        // Check if chat input is still accessible after rendering
+        const chatInput = document.getElementById('chatInput');
+        if (chatInput) {
+            console.log('Chat input status after rendering:', {
+                exists: true,
+                disabled: chatInput.disabled,
+                display: window.getComputedStyle(chatInput).display,
+                visibility: window.getComputedStyle(chatInput).visibility
+            });
+        } else {
+            console.error('Chat input not found after rendering message!');
+        }
+    }
 
-        // Store message
+    scrollChatToBottom(chatMessagesElement = null) {
+        const chatMessages = chatMessagesElement || document.getElementById('chatMessages');
+        if (chatMessages) {
+            // Use both scrollTop and scrollIntoView for better compatibility
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Also scroll the last message into view
+            const lastMessage = chatMessages.lastElementChild;
+            if (lastMessage) {
+                lastMessage.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'end' 
+                });
+            }
+            
+            console.log('Scrolled chat to bottom');
+        }
+    }
+
+    addMessage(type, text, timestamp = null) {
+        // Render the message in the DOM
+        this.renderMessage(type, text, timestamp);
+
+        // Store message in array
+        const messageTime = timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         this.chatMessages.push({
             type,
             text,
             timestamp: messageTime
         });
+    }
+
+    initializeChat() {
+        if (this.chatMessages.length === 0) {
+            const welcomeMessage = {
+                type: 'bot',
+                text: "Hello! I'm IRENO AI Assistant. I can help you with grid operations, meter readings, alerts, and system monitoring. How can I assist you today?",
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+            
+            this.chatMessages.push(welcomeMessage);
+        }
+    }
+
+    sendMessage() {
+        console.log('Send message called');
+        const chatInput = document.getElementById('chatInput');
+        if (!chatInput || !chatInput.value.trim()) {
+            console.log('No input or empty message');
+            return;
+        }
+
+        const message = chatInput.value.trim();
+        console.log('Sending message:', message);
+        chatInput.value = '';
+
+        // Add user message
+        this.addMessage('user', message);
+        console.log('User message added');
+
+        // Show typing indicator
+        this.showTypingIndicator();
+        console.log('Typing indicator shown');
+
+        // Simulate AI response
+        setTimeout(() => {
+            this.hideTypingIndicator();
+            this.handleAIResponse(message);
+            console.log('AI response completed');
+        }, 1500 + Math.random() * 1000);
     }
 
     showTypingIndicator() {
@@ -510,13 +593,18 @@ class IrenoAdvisor {
     }
 
     hideTypingIndicator() {
+        console.log('Hiding typing indicator');
         const typingIndicator = document.getElementById('typingIndicator');
         if (typingIndicator) {
             typingIndicator.classList.add('hidden');
         }
+        
+        // Ensure chat input remains functional after hiding typing
+        this.ensureChatInputFunctional();
     }
 
     handleAIResponse(userMessage) {
+        console.log('Handling AI response for:', userMessage);
         let response = '';
         
         const message = userMessage.toLowerCase();
@@ -540,6 +628,51 @@ class IrenoAdvisor {
         }
         
         this.addMessage('bot', response);
+        console.log('Bot response added');
+        
+        // Ensure chat input is still functional
+        this.ensureChatInputFunctional();
+    }
+
+    ensureChatInputFunctional() {
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatInputContainer = document.querySelector('.chat-input-container');
+        
+        console.log('Checking chat input functionality...');
+        
+        if (!chatInput) {
+            console.error('Chat input not found!');
+            return;
+        }
+        
+        if (!sendBtn) {
+            console.error('Send button not found!');
+            return;
+        }
+        
+        if (!chatInputContainer) {
+            console.error('Chat input container not found!');
+            return;
+        }
+        
+        // Ensure elements are visible and functional
+        chatInput.disabled = false;
+        sendBtn.disabled = false;
+        chatInputContainer.style.display = '';
+        
+        // Make sure the input is visible and can receive focus
+        if (chatInput.style.display === 'none' || chatInput.style.visibility === 'hidden') {
+            chatInput.style.display = '';
+            chatInput.style.visibility = 'visible';
+        }
+        
+        console.log('Chat input should be functional now');
+        
+        // Optional: Focus the input for better UX
+        setTimeout(() => {
+            chatInput.focus();
+        }, 100);
     }
 
     handleQuickAction(action) {
@@ -594,7 +727,7 @@ class IrenoAdvisor {
             // Re-add welcome message
             this.initializeChat();
             const welcomeMessage = this.chatMessages[0];
-            this.addMessage(welcomeMessage.type, welcomeMessage.text, welcomeMessage.timestamp);
+            this.renderMessage(welcomeMessage.type, welcomeMessage.text, welcomeMessage.timestamp);
             
             this.showNotification('Chat cleared', 'info');
         }
@@ -801,11 +934,121 @@ class IrenoAdvisor {
             }
         }, 5000);
     }
+
+    // Debug method to test chat functionality
+    debugChatStatus() {
+        console.log('=== CHAT DEBUG STATUS ===');
+        
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInputContainer = document.querySelector('.chat-input-container');
+        const chatSection = document.getElementById('chat');
+        
+        console.log('Chat Input:', chatInput ? 'Found' : 'NOT FOUND');
+        console.log('Send Button:', sendBtn ? 'Found' : 'NOT FOUND');
+        console.log('Chat Messages:', chatMessages ? 'Found' : 'NOT FOUND');
+        console.log('Input Container:', chatInputContainer ? 'Found' : 'NOT FOUND');
+        console.log('Chat Section:', chatSection ? 'Found' : 'NOT FOUND');
+        
+        if (chatInput) {
+            const computedStyle = window.getComputedStyle(chatInput);
+            console.log('Chat Input Details:', {
+                disabled: chatInput.disabled,
+                display: computedStyle.display,
+                visibility: computedStyle.visibility,
+                opacity: computedStyle.opacity,
+                pointerEvents: computedStyle.pointerEvents,
+                zIndex: computedStyle.zIndex
+            });
+        }
+        
+        if (chatInputContainer) {
+            const computedStyle = window.getComputedStyle(chatInputContainer);
+            console.log('Input Container Details:', {
+                display: computedStyle.display,
+                visibility: computedStyle.visibility,
+                opacity: computedStyle.opacity,
+                height: computedStyle.height
+            });
+        }
+        
+        if (chatMessages) {
+            const computedStyle = window.getComputedStyle(chatMessages);
+            console.log('Chat Messages Container:', {
+                height: computedStyle.height,
+                maxHeight: computedStyle.maxHeight,
+                overflowY: computedStyle.overflowY,
+                scrollHeight: chatMessages.scrollHeight,
+                clientHeight: chatMessages.clientHeight,
+                scrollTop: chatMessages.scrollTop,
+                isScrollable: chatMessages.scrollHeight > chatMessages.clientHeight
+            });
+        }
+        
+        if (chatSection) {
+            console.log('Chat Section Active:', chatSection.classList.contains('active'));
+        }
+        
+        console.log('Current Section:', this.currentSection);
+        console.log('Messages Count:', this.chatMessages.length);
+        console.log('=========================');
+        
+        // Try to force fix any issues
+        if (chatInput && chatInputContainer) {
+            chatInput.disabled = false;
+            chatInput.style.display = '';
+            chatInput.style.visibility = 'visible';
+            chatInput.style.opacity = '1';
+            chatInputContainer.style.display = '';
+            chatInputContainer.style.visibility = 'visible';
+            console.log('Applied fixes to chat input');
+        }
+        
+        // Test scrolling
+        if (chatMessages) {
+            console.log('Testing scroll to bottom...');
+            this.scrollChatToBottom(chatMessages);
+        }
+    }
 }
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.irenoAdvisor = new IrenoAdvisor();
+    
+    // Expose debug function globally for testing
+    window.debugChat = () => {
+        if (window.irenoAdvisor) {
+            window.irenoAdvisor.debugChatStatus();
+        } else {
+            console.error('IRENO Advisor not initialized');
+        }
+    };
+    
+    // Expose fix function globally
+    window.fixChat = () => {
+        if (window.irenoAdvisor) {
+            window.irenoAdvisor.ensureChatInputFunctional();
+        } else {
+            console.error('IRENO Advisor not initialized');
+        }
+    };
+    
+    // Expose scroll function globally
+    window.scrollChat = () => {
+        if (window.irenoAdvisor) {
+            window.irenoAdvisor.scrollChatToBottom();
+            console.log('Manual scroll to bottom executed');
+        } else {
+            console.error('IRENO Advisor not initialized');
+        }
+    };
+    
+    console.log('IRENO Advisor initialized. Available functions:');
+    console.log('- debugChat() - Debug chat status');
+    console.log('- fixChat() - Fix chat input issues');
+    console.log('- scrollChat() - Scroll chat to bottom');
 });
 
 // Handle page visibility changes for data refresh
