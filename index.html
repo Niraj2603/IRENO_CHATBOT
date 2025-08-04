@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRENO Advisor - Utility Grid Management Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <meta name="description" content="IRENO Advisor - AI-powered utility grid management and monitoring platform">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">⚡</div>
+                    <div class="logo-text">
+                        <h2>IRENO</h2>
+                        <span>Advisor</span>
+                    </div>
+                </div>
+                <button class="sidebar-toggle mobile-only" id="sidebarToggle" aria-label="Toggle Sidebar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                            <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"/>
+                                <rect x="14" y="3" width="7" height="7"/>
+                                <rect x="14" y="14" width="7" height="7"/>
+                                <rect x="3" y="14" width="7" height="7"/>
+                            </svg>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#chat" class="nav-link" data-section="chat">
+                            <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            <span>AI Assistant</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#alerts" class="nav-link" data-section="alerts">
+                            <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            <span>Alerts</span>
+                            <span class="badge">43</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#reports" class="nav-link" data-section="reports">
+                            <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10,9 9,9 8,9"/>
+                            </svg>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <div class="avatar-placeholder">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">Grid Operator</div>
+                        <div class="user-role">Cognizant Intern</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle desktop-hidden" id="sidebarToggleDesktop" aria-label="Toggle Sidebar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                    <div class="breadcrumb">
+                        <span class="breadcrumb-item active" id="breadcrumbText">Dashboard</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="system-status">
+                        <div class="status-indicator online"></div>
+                        <span>System Online</span>
+                    </div>
+                    <button class="header-btn" id="themeToggle" aria-label="Toggle Theme">
+                        <svg class="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"/>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-wrapper">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active">
+                    <div class="section-header">
+                        <h1>Grid Operations Dashboard</h1>
+                        <p class="section-subtitle">Real-time monitoring and analytics for utility grid management</p>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card primary">
+                            <div class="metric-header">
+                                <h3>Grid Status</h3>
+                                <div class="metric-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="3"/>
+                                        <path d="M12 1v6M12 17v6M5.64 5.64l4.24 4.24M14.12 14.12l4.24 4.24M1 12h6M17 12h6M5.64 18.36l4.24-4.24M14.12 9.88l4.24-4.24"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="metric-content">
+                                <div class="metric-value">Operational</div>
+                                <div class="metric-subtitle">2,847 MW / 3,200 MW</div>
+                                <div class="metric-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 89%"></div>
+                                    </div>
+                                    <span class="progress-text">89% Efficiency</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <h3>Smart Meters</h3>
+                                <div class="metric-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                        <path d="M7 15h0M17 15h0M7 11h8M7 7h3"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="metric-content">
+                                <div class="metric-value">125,430</div>
+                                <div class="metric-subtitle">Active Meters</div>
+                                <div class="metric-stats">
+                                    <div class="stat-item success">
+                                        <span class="stat-value">123,891</span>
+                                        <span class="stat-label">Online</span>
+                                    </div>
+                                    <div class="stat-item warning">
+                                        <span class="stat-value">1,539</span>
+                                        <span class="stat-label">Offline</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <h3>System Alerts</h3>
+                                <div class="metric-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                        <line x1="12" y1="9" x2="12" y2="13"/>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="metric-content">
+                                <div class="metric-value">43</div>
+                                <div class="metric-subtitle">Total Alerts</div>
+                                <div class="metric-stats">
+                                    <div class="stat-item error">
+                                        <span class="stat-value">3</span>
+                                        <span class="stat-label">Critical</span>
+                                    </div>
+                                    <div class="stat-item warning">
+                                        <span class="stat-value">12</span>
+                                        <span class="stat-label">Warning</span>
+                                    </div>
+                                    <div class="stat-item info">
+                                        <span class="stat-value">28</span>
+                                        <span class="stat-label">Info</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <h3>Energy Today</h3>
+                                <div class="metric-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="metric-content">
+                                <div class="metric-value">67,234</div>
+                                <div class="metric-subtitle">MWh Consumed</div>
+                                <div class="metric-stats">
+                                    <div class="stat-item success">
+                                        <span class="stat-value">71,567 MWh</span>
+                                        <span class="stat-label">Generated</span>
+                                    </div>
+                                    <div class="stat-item info">
+                                        <span class="stat-value">34%</span>
+                                        <span class="stat-label">Renewable</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>System Health</h3>
+                                <button class="card-action" aria-label="Refresh">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="23 4 23 10 17 10"/>
+                                        <polyline points="1 20 1 14 7 14"/>
+                                        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="system-health-list">
+                                <div class="health-item">
+                                    <div class="health-status online"></div>
+                                    <div class="health-info">
+                                        <div class="health-name">Grid Operations</div>
+                                        <div class="health-uptime">99.9% uptime</div>
+                                    </div>
+                                </div>
+                                <div class="health-item">
+                                    <div class="health-status online"></div>
+                                    <div class="health-info">
+                                        <div class="health-name">AMI System</div>
+                                        <div class="health-uptime">98.8% uptime</div>
+                                    </div>
+                                </div>
+                                <div class="health-item">
+                                    <div class="health-status warning"></div>
+                                    <div class="health-info">
+                                        <div class="health-name">Data Processing</div>
+                                        <div class="health-uptime">97.2% uptime</div>
+                                    </div>
+                                </div>
+                                <div class="health-item">
+                                    <div class="health-status online"></div>
+                                    <div class="health-info">
+                                        <div class="health-name">API Gateway</div>
+                                        <div class="health-uptime">99.5% uptime</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Recent Alerts</h3>
+                                <a href="#alerts" class="card-action-link" data-section="alerts">View All</a>
+                            </div>
+                            <div class="recent-alerts">
+                                <div class="alert-item critical">
+                                    <div class="alert-icon">⚠️</div>
+                                    <div class="alert-content">
+                                        <div class="alert-title">Transformer T-4 Overload</div>
+                                        <div class="alert-description">Brooklyn Substation - Under investigation</div>
+                                        <div class="alert-time">08:45 AM</div>
+                                    </div>
+                                </div>
+                                <div class="alert-item warning">
+                                    <div class="alert-icon">⚡</div>
+                                    <div class="alert-content">
+                                        <div class="alert-title">Meter Read Failure Rate High</div>
+                                        <div class="alert-description">Zone 7 - Manhattan - Acknowledged</div>
+                                        <div class="alert-time">08:30 AM</div>
+                                    </div>
+                                </div>
+                                <div class="alert-item info">
+                                    <div class="alert-icon">✅</div>
+                                    <div class="alert-content">
+                                        <div class="alert-title">Scheduled Maintenance Complete</div>
+                                        <div class="alert-description">Queens Distribution Center - Resolved</div>
+                                        <div class="alert-time">08:15 AM</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Chat Section -->
+                <section id="chat" class="content-section">
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <div class="chat-title">
+                                <h2>IRENO AI Assistant</h2>
+                                <div class="chat-status">
+                                    <div class="status-indicator online"></div>
+                                    <span>Online</span>
+                                </div>
+                            </div>
+                            <div class="chat-actions">
+                                <button class="chat-action-btn" id="exportChat" aria-label="Export Chat">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="7,10 12,15 17,10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                </button>
+                                <button class="chat-action-btn" id="clearChat" aria-label="Clear Chat">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3,6 5,6 21,6"/>
+                                        <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                                    </svg>
+                                </button>
+                                <button class="chat-action-btn" id="chatSettings" aria-label="Chat Settings">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="3"/>
+                                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="chat-layout">
+                            <div class="chat-main">
+                                <div class="chat-messages" id="chatMessages">
+                                    <div class="message bot">
+                                        <div class="message-avatar">
+                                            <div class="avatar-bot">🤖</div>
+                                        </div>
+                                        <div class="message-content">
+                                            <div class="message-text">
+                                                Hello! I'm IRENO AI Assistant. I can help you with grid operations, meter readings, alerts, and system monitoring. How can I assist you today?
+                                            </div>
+                                            <div class="message-time">08:00 AM</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="typing-indicator hidden" id="typingIndicator">
+                                    <div class="typing-avatar">
+                                        <div class="avatar-bot">🤖</div>
+                                    </div>
+                                    <div class="typing-content">
+                                        <div class="typing-dots">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="chat-input-container">
+                                    <div class="chat-input-wrapper">
+                                        <input type="text" class="chat-input" id="chatInput" placeholder="Ask about grid status, alerts, meters, or system health..." autocomplete="off">
+                                        <button class="send-btn" id="sendBtn" aria-label="Send Message">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="22" y1="2" x2="11" y2="13"/>
+                                                <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="quick-actions" id="quickActions">
+                                <div class="quick-actions-header">
+                                    <h3>Quick Actions</h3>
+                                    <button class="quick-actions-toggle" id="quickActionsToggle" aria-label="Toggle Quick Actions">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6,9 12,15 18,9"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="quick-actions-content">
+                                    <div class="quick-action-btn" data-action="Show me today's critical alerts">
+                                        🚨 Critical Alerts Today
+                                    </div>
+                                    <div class="quick-action-btn" data-action="What's the grid status in Brooklyn?">
+                                        🏢 Brooklyn Grid Status
+                                    </div>
+                                    <div class="quick-action-btn" data-action="Generate AMI system report">
+                                        📊 AMI System Report
+                                    </div>
+                                    <div class="quick-action-btn" data-action="Check meter read success rate">
+                                        📈 Meter Success Rate
+                                    </div>
+                                    <div class="quick-action-btn" data-action="Show outages in Manhattan">
+                                        ⚡ Manhattan Outages
+                                    </div>
+                                    <div class="quick-action-btn" data-action="Display energy consumption trends">
+                                        📉 Energy Trends
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Alerts Section -->
+                <section id="alerts" class="content-section">
+                    <div class="section-header">
+                        <h1>System Alerts</h1>
+                        <div class="section-actions">
+                            <div class="filter-group">
+                                <select class="form-control" id="alertFilter">
+                                    <option value="all">All Alerts</option>
+                                    <option value="critical">Critical</option>
+                                    <option value="warning">Warning</option>
+                                    <option value="info">Info</option>
+                                </select>
+                            </div>
+                            <button class="btn btn--primary" id="refreshAlerts">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"/>
+                                    <polyline points="1 20 1 14 7 14"/>
+                                    <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                                </svg>
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="alerts-container">
+                        <div class="alert-card critical">
+                            <div class="alert-header">
+                                <div class="alert-priority">
+                                    <span class="status status--error">Critical</span>
+                                </div>
+                                <div class="alert-actions">
+                                    <button class="btn btn--sm btn--outline">Acknowledge</button>
+                                    <button class="btn btn--sm btn--primary">Investigate</button>
+                                </div>
+                            </div>
+                            <div class="alert-body">
+                                <h3>Transformer T-4 Overload</h3>
+                                <p>Brooklyn Substation experiencing overload conditions. Immediate attention required.</p>
+                                <div class="alert-meta">
+                                    <div class="alert-location">📍 Brooklyn Substation</div>
+                                    <div class="alert-timestamp">🕐 08:45 AM</div>
+                                    <div class="alert-status-text">Under Investigation</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert-card warning">
+                            <div class="alert-header">
+                                <div class="alert-priority">
+                                    <span class="status status--warning">Warning</span>
+                                </div>
+                                <div class="alert-actions">
+                                    <button class="btn btn--sm btn--outline">Acknowledge</button>
+                                    <button class="btn btn--sm btn--secondary">Review</button>
+                                </div>
+                            </div>
+                            <div class="alert-body">
+                                <h3>Meter Read Failure Rate High</h3>
+                                <p>Zone 7 in Manhattan showing higher than normal meter read failure rates.</p>
+                                <div class="alert-meta">
+                                    <div class="alert-location">📍 Manhattan Zone 7</div>
+                                    <div class="alert-timestamp">🕐 08:30 AM</div>
+                                    <div class="alert-status-text">Acknowledged</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert-card info">
+                            <div class="alert-header">
+                                <div class="alert-priority">
+                                    <span class="status status--info">Info</span>
+                                </div>
+                                <div class="alert-actions">
+                                    <button class="btn btn--sm btn--outline">Archive</button>
+                                </div>
+                            </div>
+                            <div class="alert-body">
+                                <h3>Scheduled Maintenance Complete</h3>
+                                <p>Routine maintenance at Queens Distribution Center has been completed successfully.</p>
+                                <div class="alert-meta">
+                                    <div class="alert-location">📍 Queens Distribution Center</div>
+                                    <div class="alert-timestamp">🕐 08:15 AM</div>
+                                    <div class="alert-status-text">Resolved</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reports" class="content-section">
+                    <div class="section-header">
+                        <h1>Reports & Analytics</h1>
+                        <p class="section-subtitle">Generate comprehensive reports for grid performance and compliance</p>
+                    </div>
+
+                    <div class="reports-grid">
+                        <div class="report-card">
+                            <div class="report-icon">📊</div>
+                            <h3>Grid Performance Report</h3>
+                            <p>Comprehensive analysis of grid operations, load distribution, and efficiency metrics.</p>
+                            <button class="btn btn--primary btn--full-width">Generate Report</button>
+                        </div>
+
+                        <div class="report-card">
+                            <div class="report-icon">📈</div>
+                            <h3>AMI System Analysis</h3>
+                            <p>Smart meter performance, read success rates, and communication health metrics.</p>
+                            <button class="btn btn--primary btn--full-width">Generate Report</button>
+                        </div>
+
+                        <div class="report-card">
+                            <div class="report-icon">⚡</div>
+                            <h3>Energy Consumption Trends</h3>
+                            <p>Detailed analysis of energy usage patterns, peak demand, and forecasting.</p>
+                            <button class="btn btn--primary btn--full-width">Generate Report</button>
+                        </div>
+
+                        <div class="report-card">
+                            <div class="report-icon">🌱</div>
+                            <h3>Sustainability Metrics</h3>
+                            <p>Renewable energy integration, carbon footprint, and environmental impact analysis.</p>
+                            <button class="btn btn--primary btn--full-width">Generate Report</button>
+                        </div>
+
+                        <div class="report-card">
+                            <div class="report-icon">⚠️</div>
+                            <h3>Alert Summary</h3>
+                            <p>Historical alert trends, resolution times, and system reliability metrics.</p>
+                            <button class="btn btn--primary btn--full-width">Generate Report</button>
+                        </div>
+
+                        <div class="report-card">
+                            <div class="report-icon">🔧</div>
+                            <h3>Maintenance Schedule</h3>
+                            <p>Predictive maintenance recommendations and equipment lifecycle analysis.</p>
+                            <button class="btn btn--primary btn--full-width">Generate Report</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Settings Modal -->
+        <div class="modal hidden" id="settingsModal">
+            <div class="modal-backdrop" id="modalBackdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <button class="modal-close" id="modalClose" aria-label="Close Settings">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-group">
+                        <label class="setting-label">Display Preferences</label>
+                        <div class="theme-selector">
+                            <div class="theme-option">
+                                <input type="radio" id="themeLight" name="theme" value="light">
+                                <label for="themeLight" class="theme-option-label">
+                                    <div class="theme-preview light"></div>
+                                    <span>Light</span>
+                                </label>
+                            </div>
+                            <div class="theme-option">
+                                <input type="radio" id="themeDark" name="theme" value="dark">
+                                <label for="themeDark" class="theme-option-label">
+                                    <div class="theme-preview dark"></div>
+                                    <span>Dark</span>
+                                </label>
+                            </div>
+                            <div class="theme-option">
+                                <input type="radio" id="themeAuto" name="theme" value="auto" checked>
+                                <label for="themeAuto" class="theme-option-label">
+                                    <div class="theme-preview auto"></div>
+                                    <span>Auto</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <label class="setting-label">Notifications</label>
+                        <div class="setting-toggle">
+                            <input type="checkbox" id="alertNotifications" checked>
+                            <label for="alertNotifications">Critical Alert Notifications</label>
+                        </div>
+                        <div class="setting-toggle">
+                            <input type="checkbox" id="systemNotifications" checked>
+                            <label for="systemNotifications">System Status Updates</label>
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <label class="setting-label">Data Refresh</label>
+                        <select class="form-control" id="refreshInterval">
+                            <option value="30">30 seconds</option>
+                            <option value="60" selected>1 minute</option>
+                            <option value="300">5 minutes</option>
+                            <option value="600">10 minutes</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn--outline" id="resetSettings">Reset to Default</button>
+                    <button class="btn btn--primary" id="saveSettings">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
