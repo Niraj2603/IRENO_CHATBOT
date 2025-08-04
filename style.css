@@ -1366,6 +1366,7 @@ select.form-control {
   height: 100%;
   display: flex;
   flex-direction: column;
+  max-height: calc(100vh - 64px); /* Account for header height */
 }
 
 .chat-header {
@@ -1375,6 +1376,7 @@ select.form-control {
   align-items: center;
   justify-content: space-between;
   background-color: var(--color-surface);
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .chat-title {
@@ -1425,19 +1427,24 @@ select.form-control {
   grid-template-columns: 1fr 320px;
   gap: 0;
   overflow: hidden;
+  min-height: 0; /* Allow flex children to shrink */
 }
 
 .chat-main {
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--color-border);
+  min-height: 0; /* Allow flex children to shrink */
 }
 
 .chat-messages {
   flex: 1;
   padding: var(--space-20);
   overflow-y: auto;
+  overflow-x: hidden;
   scroll-behavior: smooth;
+  min-height: 0; /* Allow flex children to shrink */
+  max-height: calc(100vh - 200px); /* Constrain height to enable scrolling */
 }
 
 .message {
@@ -1562,6 +1569,7 @@ select.form-control {
   padding: var(--space-20);
   border-top: 1px solid var(--color-border);
   background-color: var(--color-background);
+  flex-shrink: 0; /* Prevent input container from shrinking */
 }
 
 .chat-input-wrapper {
@@ -2077,6 +2085,7 @@ select.form-control {
   
   .chat-messages {
     padding: var(--space-16);
+    max-height: calc(100vh - 180px); /* Adjust for mobile */
   }
   
   .chat-input-container {
